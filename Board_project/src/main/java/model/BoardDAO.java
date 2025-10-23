@@ -159,24 +159,60 @@ public class BoardDAO {
 				throw new Exception();
 			}
 			con.close();
-			System.out.println(board.toString());
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 		return board;
 	}
 
+	//게시글 수정
 	public void updateBoard(BoardDTO board) {
 		getCon();
 		try {
 			//게시글 가져옴
-			System.out.println("update Board >>> "+board.toString());
+			System.out.println("update Board >>> " + board.toString());
 			String sql = "update board set subject = ?, content = ? where num = ?";
 			pstmt = con.prepareStatement(sql);
 			pstmt.setString(1, board.getSubject());
 			pstmt.setString(2, board.getContent());
 			pstmt.setInt(3, board.getNum());
 			pstmt.executeUpdate();
+
+			pstmt.close();
+			con.close();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+
+	//게시글 삭제
+	public void deleteBoard(int num) {
+		getCon();//템플릿
+		try {//템플릿
+			String sql = "delete from board where num = ?";//템플릿
+			pstmt.setInt(1, num);
+			pstmt = con.prepareStatement(sql);//템플릿1
+			pstmt.executeUpdate();
+			pstmt.close();//템플릿
+			con.close();//템플릿
+		} catch (Exception e) {//템플릿
+			e.printStackTrace();//템플릿
+		} //템플릿
+	}
+
+	//댓글 생성
+	public void replyBoard(BoardDTO board) {
+		getCon();
+		int ref = board.getRef();
+		int reStep = board.getRe_step();
+		int reLevel = board.getRe_level();
+		try {
+			String sql = "update board set re_level=re_level+1 where ref=? and re_level>?";
+			pstmt = con.prepareStatement(sql);
+			pstmt.setInt(1, ref);
+			pstmt.setInt(2, reLevel);
+			pstmt.executeUpdate();
+			insertBoard(board);
 			con.close();
 		} catch (Exception e) {
 			e.printStackTrace();

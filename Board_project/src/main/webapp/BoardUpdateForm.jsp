@@ -87,6 +87,16 @@ h2, b {
 
 </head>
 <body>
+<c:if test="${msg==0}" >
+<script>
+alert("password is correct(update fail)");
+</script>
+</c:if>
+<c:if test="${msg==1}" >
+<script>
+alert("password is correct(delete fail)");
+</script>
+</c:if>
 	<div id="container">
 		<b>게시글 수정하기</b>
 		<p />

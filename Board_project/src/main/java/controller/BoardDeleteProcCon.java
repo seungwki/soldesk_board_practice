@@ -1,6 +1,7 @@
 package controller;
 
 import java.io.IOException;
+import java.util.ArrayList;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -12,8 +13,8 @@ import javax.servlet.http.HttpServletResponse;
 import model.BoardDAO;
 import model.BoardDTO;
 
-@WebServlet("/BoardUpdateCon.do")
-public class BoardUpdateCon extends HttpServlet {
+@WebServlet("/BoardDeleteProcCon.do")
+public class BoardDeleteProcCon extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -30,13 +31,18 @@ public class BoardUpdateCon extends HttpServlet {
 		request.setCharacterEncoding("UTF-8");
 		int num = Integer.parseInt(request.getParameter("num"));
 		BoardDAO dao = new BoardDAO();
-		BoardDTO target = dao.getBoard(num);
-		target.setContent(request.getParameter("content"));
-		target.setSubject(request.getParameter("subject"));
-		dao.updateBoard(target);
-		request.setAttribute("board", dao.getBoard(num));
 
-		RequestDispatcher dis = request.getRequestDispatcher("BoardUpdateProcForm.jsp");
+		String password = request.getParameter("password");
+		String pass = request.getParameter("pass");
+
+		if (password.equals(pass)) {
+			dao.deleteBoard(num);
+		} else {
+			int msg = 1;
+			request.setAttribute("msg", msg);
+		}
+		RequestDispatcher dis = request.getRequestDispatcher("BoardList.jsp");
 		dis.forward(request, response);
+
 	}
 }

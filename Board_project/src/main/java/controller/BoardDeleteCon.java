@@ -1,6 +1,7 @@
 package controller;
 
 import java.io.IOException;
+import java.util.ArrayList;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -12,8 +13,8 @@ import javax.servlet.http.HttpServletResponse;
 import model.BoardDAO;
 import model.BoardDTO;
 
-@WebServlet("/BoardUpdateCon.do")
-public class BoardUpdateCon extends HttpServlet {
+@WebServlet("/BoardDeleteCon.do")
+public class BoardDeleteCon extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -27,16 +28,9 @@ public class BoardUpdateCon extends HttpServlet {
 	}
 
 	protected void requestPro(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		request.setCharacterEncoding("UTF-8");
 		int num = Integer.parseInt(request.getParameter("num"));
 		BoardDAO dao = new BoardDAO();
-		BoardDTO target = dao.getBoard(num);
-		target.setContent(request.getParameter("content"));
-		target.setSubject(request.getParameter("subject"));
-		dao.updateBoard(target);
-		request.setAttribute("board", dao.getBoard(num));
-
-		RequestDispatcher dis = request.getRequestDispatcher("BoardUpdateProcForm.jsp");
+		RequestDispatcher dis = request.getRequestDispatcher("BoardDelete.jsp");//작업 처리 후 HTML이나 JSP등을 보내줌
 		dis.forward(request, response);
 	}
 }
